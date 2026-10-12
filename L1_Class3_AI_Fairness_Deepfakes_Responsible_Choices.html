@@ -1,0 +1,451 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Fairness, Deepfakes and Making Responsible Choices</title><style>*{box-sizing:border-box}
+html{background:#eceef9}
+:root{--ink:#1c2250;--muted:#4b5384;--card:#fff;--line:#d9def3;--indigo:#4a52c9;--moon:#f3c44f;--teal:#1fa79c;--coral:#e9604f;--lilac:#8a68dc;--sky:#3a8ee0;--soft:#f3f5fe}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;font-size:19px;line-height:1.5;color:var(--ink);min-height:100vh;
+background:
+radial-gradient(circle at calc(100% - 90px) 120px,#fffdf3 0 48px,#fbeeb9 49px 54px,rgba(251,238,185,.5) 55px 105px,rgba(251,238,185,0) 230px),
+radial-gradient(circle at 8% 22%,#b3bcea 0 2px,transparent 3px),
+radial-gradient(circle at 22% 9%,#c7b8ef 0 2px,transparent 3px),
+radial-gradient(circle at 41% 16%,#b3bcea 0 1.5px,transparent 2.5px),
+radial-gradient(circle at 63% 7%,#c7b8ef 0 2px,transparent 3px),
+radial-gradient(circle at 74% 28%,#b3bcea 0 1.5px,transparent 2.5px),
+radial-gradient(circle at 5% 64%,#c7b8ef 0 2px,transparent 3px),
+radial-gradient(circle at 95% 58%,#b3bcea 0 2px,transparent 3px),
+radial-gradient(circle at 33% 88%,#c7b8ef 0 1.5px,transparent 2.5px),
+radial-gradient(circle at 82% 92%,#b3bcea 0 2px,transparent 3px),
+linear-gradient(170deg,#edf1fc 0%,#e6e5f8 55%,#f3eefb 100%);
+background-attachment:fixed}
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 22px;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.brand{font-size:14px;font-weight:700;color:var(--indigo);letter-spacing:.3px}
+.lvl{font-size:14px;color:var(--muted);flex:1}
+.homebtn{font:inherit;font-size:15px;font-weight:700;background:#fff;border:2px solid var(--line);color:var(--indigo);border-radius:12px;padding:6px 14px;cursor:pointer}
+main{max-width:1120px;margin:0 auto;padding:24px 18px 70px}
+.page{display:none;animation:fade .35s}
+.page.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.luna{display:inline-block;width:110px}
+.luna svg{width:100%;height:auto;display:block}
+.big-luna{width:170px;animation:float 3.2s ease-in-out infinite}
+.title-card{min-height:76vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.title-card h1{font-size:clamp(36px,5.4vw,60px);line-height:1.15;margin:6px 0 10px;max-width:900px}
+.chap{font-size:17px;font-weight:700;color:var(--lilac);background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 18px}
+.menu-h{font-size:36px;margin:4px 0 4px}
+.menu-sub{color:var(--muted);margin:0 0 18px}
+.grp-h{display:inline-block;font-weight:700;font-size:18px;padding:6px 16px;border-radius:999px;background:#fff;border:2px solid var(--line);margin:18px 0 12px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:16px}
+.mcard{font:inherit;position:relative;text-align:left;background:#fff;border:1px solid var(--line);border-top:7px solid var(--indigo);border-radius:20px;padding:16px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;box-shadow:0 6px 20px rgba(60,70,150,.08);transition:transform .15s,box-shadow .15s;color:var(--ink)}
+.mcard:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(60,70,150,.15)}
+.mcard.g-Do{border-top-color:var(--teal)}.mcard.g-Wrap{border-top-color:var(--coral)}
+.mnum{position:absolute;top:12px;right:14px;width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:700;font-size:15px;color:var(--muted)}
+.mcard.done .mnum{background:var(--moon);color:var(--ink)}
+.mcard.done .mnum::after{content:"⭐";position:absolute;font-size:14px;top:-8px;right:-8px}
+.mic{font-size:40px;line-height:1}
+.mt{font-size:21px;font-weight:700}
+.mm{font-size:15px;color:var(--muted)}
+.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.sec-ic{font-size:42px;min-width:76px;height:76px;border-radius:22px;background:#fff;display:grid;place-items:center;border:2px solid var(--line)}
+.sec-kick{font-size:15px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.sec-title{font-size:34px;margin:0;line-height:1.2}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,#4a52c9,#8a68dc);color:#fff;border-radius:999px;padding:4px 13px;font-size:13px;font-weight:700}
+.badge.b2{background:linear-gradient(90deg,#1fa79c,#3a8ee0)}
+.badge.b3{background:linear-gradient(90deg,#e9604f,#f39a3d)}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px 24px;box-shadow:0 6px 22px rgba(60,70,150,.08);margin-bottom:18px}
+.card h3{margin:0 0 10px;font-size:25px}
+.card p{margin:6px 0}
+.muted{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:16px}
+.btn{font:inherit;font-weight:700;border:none;border-radius:14px;padding:12px 20px;background:var(--indigo);color:#fff;cursor:pointer;box-shadow:0 4px 0 #343b9e;transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #343b9e}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.teal{background:var(--teal);box-shadow:0 4px 0 #13786f}
+.btn.coral{background:var(--coral);box-shadow:0 4px 0 #b4402f}
+.btn.lilac{background:var(--lilac);box-shadow:0 4px 0 #6447b3}
+.btn.moon{background:var(--moon);color:var(--ink);box-shadow:0 4px 0 #c99a20}
+.btn.ghost{background:#fff;color:var(--indigo);border:2px solid var(--line);box-shadow:none}
+.btn.big{font-size:24px;padding:16px 36px;border-radius:18px}
+.btn.sm{font-size:16px;padding:8px 14px;border-radius:11px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.sec-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:28px}
+.slide{display:none;text-align:center;padding:10px 6px}
+.slide.on{display:block;animation:fade .4s}
+.scene{font-size:72px;line-height:1.2;margin:10px 0 14px;letter-spacing:6px}
+.story-text{font-size:24px;max-width:820px;margin:0 auto}
+.big-q{font-weight:700;color:var(--indigo)}
+.sl-ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+.dots{display:flex;gap:8px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--moon);transform:scale(1.25)}
+.flip{perspective:900px;cursor:pointer;min-height:230px}
+.flip .in{position:relative;width:100%;min-height:230px;transition:transform .6s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line)}
+.flip .f{background:#fff;box-shadow:0 6px 18px rgba(60,70,150,.08)}
+.flip .f .big{font-size:62px;line-height:1.1}
+.flip .f b{font-size:23px;margin-top:6px}
+.flip .f small{color:var(--muted);font-size:14px;margin-top:6px}
+.flip .b{background:linear-gradient(160deg,#4a52c9,#8a68dc);color:#fff;transform:rotateY(180deg);font-size:20px}
+.pipeline{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;justify-content:center}
+.pstep{background:var(--soft);border-radius:18px;padding:16px;text-align:center;min-width:170px;flex:1}
+.pstep .big{font-size:44px;line-height:1.2}
+.pstep b{display:block;font-size:21px}
+.pstep span{display:block;color:var(--muted);font-size:16px}
+.parrow{font-size:34px;color:var(--lilac);align-self:center}
+.chip{font:inherit;background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 12px;cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;min-width:100px;color:var(--ink);transition:transform .12s}
+.chip:hover{transform:translateY(-2px)}
+.chip .big{font-size:42px;line-height:1.15}
+.chip small{font-size:15px;color:var(--muted)}
+.chip.sel{border-color:var(--moon);box-shadow:0 0 0 4px #fbe6a4}
+.chip.ok{border-color:var(--teal);background:#e6f7f5}
+.chip.bad{border-color:var(--coral);background:#fdecea}
+.tray{display:flex;flex-wrap:wrap;gap:10px;padding:14px;background:var(--soft);border-radius:18px;border:2px dashed var(--line);min-height:96px}
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+.bucket{background:#fff;border:3px solid var(--line);border-radius:18px;padding:12px;min-height:150px;cursor:pointer}
+.bucket:hover{border-color:var(--indigo)}
+.bh{font-weight:700;font-size:20px;margin-bottom:8px}
+.bin{display:flex;flex-wrap:wrap;gap:8px}
+.fb{font-weight:700;font-size:20px;min-height:28px}
+.fb.good{color:#13786f}.fb.oops{color:#b4402f}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 20px;margin-bottom:14px}
+.qn{display:inline-block;background:var(--moon);border-radius:10px;padding:2px 10px;font-weight:700;font-size:14px}
+.qq{font-size:21px;font-weight:700;margin:8px 0}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.opt{font:inherit;text-align:left;background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;color:var(--ink)}
+.opt:hover{border-color:var(--indigo)}
+.opt.right{background:#e3f6f3;border-color:var(--teal)}
+.opt.wrong{background:#fdebe8;border-color:var(--coral)}
+.why{margin:8px 0 0;color:var(--muted)}
+.score-box{text-align:center;font-size:26px;font-weight:700;background:linear-gradient(90deg,#fff6d6,#efeaff);border-radius:18px;padding:18px}
+.tip{background:#fff8e1;border-left:6px solid var(--moon);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:17px}
+.tip.teacher{background:#eef0ff;border-left-color:var(--indigo)}
+.meter{height:24px;background:#eceffa;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.meter>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--sky));transition:width .45s}
+.blk{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:12px;color:#fff;font-weight:700;font-size:18px}
+.blk select,.blk input{font:inherit;font-size:17px;border-radius:8px;border:none;padding:4px 8px;color:var(--ink);background:#fff}
+.blk.if{background:#ef8d2c}.blk.and{background:#c77700}.blk.then{background:var(--indigo)}.blk.when{background:#d9a20a}.blk.do{background:var(--teal)}.blk.say{background:var(--lilac)}
+.rule{background:var(--soft);border-radius:16px;padding:10px 12px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:2px solid var(--line)}
+.codebox{background:#f6f4ff;border:2px solid #ddd6fb;border-radius:16px;padding:14px 16px;font-family:"Courier New",monospace;font-size:17px;white-space:pre-wrap;color:#2c2f6b;line-height:1.55}
+.codebox .k{color:#c2410c;font-weight:700}.codebox .s{color:#0f766e}.codebox .c{color:#7c7fa8}
+.res-table{width:100%;border-collapse:collapse;margin-top:10px}
+.res-table td,.res-table th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+.res-table th{font-size:15px;color:var(--muted)}
+.discuss{display:grid;gap:14px}
+.dq{font-size:22px;font-weight:700}
+.ans{background:var(--soft);border-radius:12px;padding:10px 14px;margin-top:10px}
+.mission{background:linear-gradient(135deg,#fff8e1,#efeaff);border:2px solid #e9dcff}
+.mission li{margin:6px 0}
+.mission input{transform:scale(1.4);margin-right:10px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:14px 22px;border-radius:16px;font-weight:700;z-index:99;transition:transform .35s;max-width:90vw;text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.conf{position:fixed;top:-50px;font-size:30px;pointer-events:none;z-index:98;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(380deg)}}
+.pill{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:15px;margin:2px}
+.center{text-align:center}
+@media(max-width:640px){body{font-size:17px}.sec-title{font-size:26px}.scene{font-size:52px}.story-text{font-size:20px}.menu-h{font-size:28px}}
+</style></head><body>
+<header class="top"><div class="brand">Young IT Germany</div><div class="lvl">Level 1 · AI Explorer</div><button class="homebtn" data-go="menu">🏠 Menu</button></header>
+<main>
+<section class="page show" id="title"><div class="title-card"><div class="chap">How AI Makes Choices — Algorithms, Ethics &amp; Fairness</div><div class="luna big-luna"></div><h1>AI Fairness, Deepfakes and Making Responsible Choices</h1><button class="btn big moon" data-go="menu">Enter Activities ✨</button></div></section>
+<section class="page" id="menu"><h2 class="menu-h">AI Fairness, Deepfakes and Making Responsible Choices</h2><p class="menu-sub">Follow the moon path from 1 to 8 — or tap any part to jump in!</p><div id="menuGrid"></div></section>
+<section class="page" data-sec="hook" data-group="Learn" data-title="Hook / Story" data-min="5" data-icon="📖">
+<div class="card"><div class="slides">
+ <div class="slide"><div class="scene">🏫 🎨 🤖</div><p class="story-text">Moon School had a drawing contest. This year, a <b>Robot Judge</b> would pick the winners!</p></div>
+ <div class="slide"><div class="scene">🔵 🔵 🔵 🔵</div><p class="story-text">But the robot had learned only from drawings made with <b>blue</b> crayons. Blue, blue, blue!</p></div>
+ <div class="slide"><div class="scene">👧 🚀 ❌</div><p class="story-text">Zoe drew an amazing <b>red rocket</b>. The robot beeped: "NOT ART!" Zoe was so sad. Was that fair?</p></div>
+ <div class="slide"><div class="scene">📱 🧑‍🏫 🗣️</div><p class="story-text">Then a video went around: the principal saying <b>"No homework forever!"</b> Everyone cheered… but the principal never said it! An AI had made a fake video.</p></div>
+ <div class="slide"><div class="scene">🤔 ⚖️ 🕵️</div><p class="story-text big-q">What went wrong with the Robot Judge? And how can we know if a video is real?</p></div>
+</div><div class="row"><button class="btn ghost sm" data-say=".slide.on">🔊 Read to me</button></div></div>
+<div class="tip teacher">👩‍🏫 <b>Teacher tip:</b> Let students share how Zoe felt. Lead them to the idea: the robot was not "bad" — it learned from data that left people out.</div>
+</section>
+
+<section class="page" data-sec="concept" data-group="Learn" data-title="Simple Concept" data-min="10" data-icon="💡">
+<div class="badges"><span class="badge">🇪🇺 AI Literacy</span><span class="badge b2">🇪🇺 EU AI Act · Label AI-made content</span><span class="badge b3">🇪🇺 Human Oversight</span></div>
+<div class="grid2">
+ <div class="card"><h3>⚖️ Fair or unfair?</h3><p>AI learns from data. If the data <b>leaves some people out</b>, the AI can be unfair to them. This is called <b>bias</b>.</p><div class="center" style="font-size:52px">🔵🔵🔵 ➜ 🤖 ➜ 🔴❌</div><p class="muted center">Only blue examples → red drawings get rejected</p></div>
+ <div class="card"><h3>🎭 What is a deepfake?</h3><p>A picture, video or voice that an AI <b>made or changed</b> so it looks real — but it is not.</p><div class="center" style="font-size:52px">🧑 + 🤖 ➜ 🎭</div><p class="muted center">In Europe, AI-made content should be labelled.</p></div>
+</div>
+<div class="card"><h3>🔎 Clues that something may be fake</h3><div class="grid3">
+ <div class="pstep"><div class="big">🖐️</div><b>Weird hands</b><span>Extra fingers, strange shapes</span></div>
+ <div class="pstep"><div class="big">🌫️</div><b>Blurry edges</b><span>Around faces or hair</span></div>
+ <div class="pstep"><div class="big">🗣️</div><b>Odd voice</b><span>Robotic or wrong feelings</span></div>
+ <div class="pstep"><div class="big">😱</div><b>Too shocking</b><span>"Share before it's deleted!"</span></div>
+ <div class="pstep"><div class="big">❓</div><b>No trusted source</b><span>Not from school, news or family</span></div>
+</div></div>
+<div class="card"><h3>🚦 Responsible choices: STOP · THINK · CHECK · ASK</h3><div class="pipeline">
+ <div class="pstep" style="background:#fdecea"><div class="big">🛑</div><b>STOP</b><span>Don't share right away</span></div>
+ <div class="pstep" style="background:#fff8e1"><div class="big">🧠</div><b>THINK</b><span>Could this be fake or unkind?</span></div>
+ <div class="pstep" style="background:#e6f7f5"><div class="big">🔍</div><b>CHECK</b><span>Look for a trusted source</span></div>
+ <div class="pstep" style="background:#eef0ff"><div class="big">🙋</div><b>ASK</b><span>Talk to a grown-up you trust</span></div></div></div>
+<h3 style="margin:8px 0 12px">🃏 Magic word cards — tap to flip!</h3>
+<div class="grid3">
+ <div class="flip"><div class="in"><div class="f"><div class="big">🫤</div><b>Bias</b><small>Tap to flip 👆</small></div><div class="b">When an AI treats some people or things unfairly because of the data it learned from.</div></div></div>
+ <div class="flip"><div class="in"><div class="f"><div class="big">⚖️</div><b>Fairness</b><small>Tap to flip 👆</small></div><div class="b">Making sure AI works well for EVERYONE — all colours, ages and abilities.</div></div></div>
+ <div class="flip"><div class="in"><div class="f"><div class="big">🎭</div><b>Deepfake</b><small>Tap to flip 👆</small></div><div class="b">A fake photo, video or voice made by AI to look real.</div></div></div>
+ <div class="flip"><div class="in"><div class="f"><div class="big">🧑‍⚖️</div><b>Human Oversight</b><small>Tap to flip 👆</small></div><div class="b">A real person checks what the AI decides. People stay in charge!</div></div></div>
+</div>
+</section>
+
+<section class="page" data-sec="demo" data-group="Learn" data-title="Live AI Demo" data-min="10" data-icon="🔮">
+<div class="card"><h3>🤖 Part A: Fix the Robot Judge</h3><p>The robot only accepts drawings in colours it has learned. Add more colours to its training data and watch it become fairer!</p>
+<div class="row" id="trainCols"></div>
+<div id="entries" class="row" style="margin-top:14px"></div>
+<p style="margin:14px 0 4px"><b>Fairness meter</b> — good drawings accepted: <span id="fairTxt"></span></p><div class="meter"><i id="fairBar"></i></div></div>
+<div class="card"><div class="badges"><span class="badge b2">🇪🇺 EU AI Act · Transparency</span></div><h3>🗣️ Part B: A computer can say ANYTHING</h3>
+<p>Type any sentence. The computer voice will say it — even words no person ever said. This is how voice deepfakes trick people.</p>
+<div class="row"><input id="fakeTxt" value="Hello class, there is no school tomorrow!" style="font:inherit;flex:1;min-width:240px;padding:12px;border-radius:12px;border:2px solid #d9def3">
+<button class="btn lilac" id="fakeSay">🔊 Make it speak</button></div>
+<div class="row"><label style="font-size:17px"><input type="checkbox" id="lbl" checked style="transform:scale(1.4);margin-right:8px">🏷️ Add the label "This voice is AI-made"</label></div>
+<div id="lblBox" class="tip" style="margin-top:10px">🏷️ <b>AI-made voice.</b> Labels help people know what is real. In Europe, the AI Act says deepfakes must be labelled.</div></div>
+<div class="tip teacher">👩‍🏫 <b>Ask the class:</b> Why could a fake voice of a teacher or parent be dangerous? What should you do if you hear a strange message?</div>
+</section>
+
+<section class="page" data-sec="activity" data-group="Do" data-title="Student Activity" data-min="15" data-icon="🧩">
+<div class="card"><h3>🕵️ Real or Could Be Fake?</h3><p>Be a Fake Detective! Read each one and choose.</p><div id="posts" class="grid2"></div>
+<p class="fb" id="postFb"></p></div>
+</section>
+
+<section class="page" data-sec="build" data-group="Do" data-title="Build / Coding Exercise" data-min="20" data-icon="🧱">
+<div class="card"><h3>👋 Help the Robot Greet Everyone</h3><p>The robot at the school door says "Hello!" only to faces it has learned. Right now it learned only one kind of face. Add photos so it greets <b>all 4 friends</b>! You have <b>5 spots</b>.</p>
+<p style="margin:12px 0 4px"><b>📚 Robot's photos</b> (<span id="tN"></span> / 5) — tap to remove</p><div id="train" class="tray" style="background:#fff;min-height:90px"></div>
+<p style="margin:14px 0 4px"><b>🖼️ Photo box</b> — tap to add</p><div id="pool" class="tray"></div>
+<div class="row"><button class="btn teal" id="gRun">▶ Open the door</button><button class="btn ghost" id="gRst">Start again ↺</button></div></div>
+<div class="grid2">
+ <div class="card"><h3>👀 Your code</h3><div class="codebox" id="gCode"></div></div>
+ <div class="card"><h3>🚪 At the school door</h3><div id="door" class="muted">Press ▶ to open the door.</div><p class="fb" id="gFb"></p></div>
+</div>
+<div class="tip">💡 <b>Hint:</b> Look at the skin colours of the 4 friends. Does the robot have a photo like each of them?</div>
+</section>
+
+<section class="page" data-sec="challenge" data-group="Do" data-title="Challenge" data-min="15" data-icon="🏆">
+<div class="card"><h3>🧭 Kind Choices Game</h3><p>What would a kind AI Explorer do?</p><div id="dilemmas"></div></div>
+<div class="card mission"><h3>🌟 Super Challenge: My AI Promise</h3><p>Write your name and choose your promises.</p>
+<div class="row"><input id="pName" placeholder="Your name" style="font:inherit;padding:10px;border-radius:12px;border:2px solid #d9def3;width:220px"></div>
+<div style="margin-top:10px"><label><input type="checkbox" class="pr" value="I will STOP and ASK a grown-up before I share."> I will STOP and ASK a grown-up before I share.</label><br>
+<label><input type="checkbox" class="pr" value="I will be kind online."> I will be kind online.</label><br>
+<label><input type="checkbox" class="pr" value="I will tell a grown-up if an AI is unfair."> I will tell a grown-up if an AI is unfair.</label></div>
+<div class="row"><button class="btn moon" id="pMake">✨ Make my promise card</button></div><div id="pCard"></div><textarea id="pOwn" hidden></textarea></div>
+</section>
+
+<section class="page" data-sec="discuss" data-group="Wrap" data-title="Discussion" data-min="5" data-icon="💬">
+<div class="discuss">
+ <div class="card"><div class="badges"><span class="badge b3">🇪🇺 Human Oversight</span></div><div class="dq">🤖 When an AI is unfair, who is responsible — the robot or the people?</div><button class="btn ghost sm" data-reveal>💡 Show an idea</button><div class="ans" hidden>The people who build and use it! Humans choose the data and should always check what the AI decides.</div></div>
+ <div class="card"><div class="badges"><span class="badge b2">🇪🇺 EU AI Act</span></div><div class="dq">🏷️ Should AI-made pictures and videos always have a label?</div><button class="btn ghost sm" data-reveal>💡 Show an idea</button><div class="ans" hidden>Yes — labels help everyone know what is real. The EU AI Act says deepfakes must be clearly marked.</div></div>
+ <div class="card"><div class="dq">🌍 How can we make AI fair for everyone?</div><button class="btn ghost sm" data-reveal>💡 Show an idea</button><div class="ans" hidden>Use examples of all kinds of people, test the AI on everyone, and listen when someone says "this is unfair".</div></div>
+</div>
+</section>
+
+<section class="page" data-sec="quiz" data-group="Wrap" data-title="Quiz &amp; Take-home Mission" data-min="10" data-icon="🎯">
+<div id="quiz"></div>
+<div class="card mission"><h3>🚀 Take-home Mission: Fake Detective at Home</h3><ul style="list-style:none;padding:0">
+<li><label><input type="checkbox">With a grown-up, look at 3 pictures or videos online</label></li>
+<li><label><input type="checkbox">Use the clues: weird hands, blurry edges, too shocking, no trusted source</label></li>
+<li><label><input type="checkbox">Teach your family STOP · THINK · CHECK · ASK</label></li>
+<li><label><input type="checkbox">Draw a poster: "Be a Responsible AI Explorer!"</label></li></ul></div>
+</section>
+
+</main><script>const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const LUNA=`<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="10" x2="60" y2="24" stroke="#4a52c9" stroke-width="4" stroke-linecap="round"/><path d="M60 1 l3.2 6.4 7 1-5 5 1.2 7-6.4-3.4-6.4 3.4 1.2-7-5-5 7-1z" fill="#f3c44f"/><circle cx="60" cy="52" r="30" fill="#fff4c9" stroke="#f3c44f" stroke-width="4"/><circle cx="75" cy="40" r="5" fill="#f6dd8a"/><circle cx="44" cy="66" r="4" fill="#f6dd8a"/><circle cx="49" cy="50" r="5.5" fill="#1c2250"/><circle cx="71" cy="50" r="5.5" fill="#1c2250"/><circle cx="51" cy="48" r="1.8" fill="#fff"/><circle cx="73" cy="48" r="1.8" fill="#fff"/><path d="M50 62 q10 8 20 0" stroke="#1c2250" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="39" cy="60" r="4" fill="#f9b4a8"/><circle cx="81" cy="60" r="4" fill="#f9b4a8"/><rect x="32" y="84" width="56" height="42" rx="14" fill="#8a68dc"/><rect x="44" y="93" width="32" height="20" rx="6" fill="#eef2fc"/><circle cx="52" cy="103" r="3" fill="#1fa79c"/><circle cx="60" cy="103" r="3" fill="#f3c44f"/><circle cx="68" cy="103" r="3" fill="#e9604f"/><rect x="18" y="89" width="12" height="26" rx="6" fill="#4a52c9"/><rect x="90" y="89" width="12" height="26" rx="6" fill="#4a52c9"/><rect x="40" y="124" width="12" height="13" rx="4" fill="#4a52c9"/><rect x="68" y="124" width="12" height="13" rx="4" fill="#4a52c9"/></svg>`;
+const App={onShow:{},shown:new Set(),done:new Set()};
+const GROUPS=[['Learn','🌙 Learn'],['Do','🚀 Do &amp; Build'],['Wrap','⭐ Wrap Up']];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function setup(){
+  $$('.luna').forEach(e=>e.innerHTML=LUNA);
+  const secs=$$('section.page[data-sec]');
+  secs.forEach(s=>s.id='s-'+s.dataset.sec);
+  const grid=$('#menuGrid');
+  GROUPS.forEach(([g,label])=>{
+    const list=secs.filter(s=>s.dataset.group===g); if(!list.length)return;
+    grid.insertAdjacentHTML('beforeend',`<div class="grp-h">${label}</div><div class="mgrid" id="mg-${g}"></div>`);
+    list.forEach(s=>{const i=secs.indexOf(s);
+      $('#mg-'+g).insertAdjacentHTML('beforeend',`<button class="mcard g-${g}" data-go="${s.id}"><span class="mnum">${i+1}</span><span class="mic">${s.dataset.icon}</span><span class="mt">${s.dataset.title}</span><span class="mm">⏱ ${s.dataset.min} min</span></button>`)});
+  });
+  secs.forEach((s,i)=>{
+    s.insertAdjacentHTML('afterbegin',`<div class="sec-head"><div class="sec-ic">${s.dataset.icon}</div><div><div class="sec-kick">Part ${i+1} of ${secs.length} · ${s.dataset.min} minutes</div><h2 class="sec-title">${s.dataset.title}</h2></div></div>`);
+    const nx=secs[i+1];
+    s.insertAdjacentHTML('beforeend',`<div class="sec-nav"><button class="btn ghost" data-go="menu">← Back to Menu</button>${nx?`<button class="btn" data-go="${nx.id}">Next: ${nx.dataset.title} →</button>`:`<button class="btn moon" data-go="menu">Finish 🌙</button>`}</div>`);
+  });
+  document.addEventListener('click',e=>{
+    const g=e.target.closest('[data-go]'); if(g){go(g.dataset.go);return}
+    const f=e.target.closest('.flip'); if(f){f.classList.toggle('on');return}
+    const r=e.target.closest('[data-reveal]'); if(r){const t=r.nextElementSibling;t.hidden=!t.hidden;r.textContent=t.hidden?'💡 Show an idea':'🙈 Hide idea';return}
+    const sy=e.target.closest('[data-say]'); if(sy){const t=sy.dataset.say?$('.page.show '+sy.dataset.say):sy.closest('.card');if(t)say(t.innerText)}
+  });
+  $$('.slides').forEach(initSlides);
+}
+function go(id){
+  $$('.page').forEach(p=>p.classList.remove('show'));
+  const p=document.getElementById(id); if(!p)return; p.classList.add('show'); window.scrollTo({top:0});
+  if('speechSynthesis' in window)speechSynthesis.cancel();
+  if(!App.shown.has(id)){App.shown.add(id);const sec=p.dataset.sec;if(sec&&App.onShow[sec])App.onShow[sec]()}
+}
+function say(t){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.9;u.lang='en-US';speechSynthesis.speak(u)}
+function initSlides(el){
+  const sl=$$('.slide',el);let i=0;
+  el.insertAdjacentHTML('beforeend',`<div class="sl-ctrl"><button class="btn ghost prev">◀ Back</button><div class="dots">${sl.map(()=>'<i></i>').join('')}</div><button class="btn next">Next ▶</button></div>`);
+  const dots=$$('.dots i',el),pv=$('.prev',el),nx=$('.next',el);
+  const up=()=>{sl.forEach((s,k)=>s.classList.toggle('on',k===i));dots.forEach((d,k)=>d.classList.toggle('on',k===i));pv.disabled=i===0;nx.disabled=i===sl.length-1};
+  pv.onclick=()=>{if(i>0){i--;up()}};nx.onclick=()=>{if(i<sl.length-1){i++;up()}};up();
+}
+let toastT;
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
+function confetti(){const em=['⭐','🌙','✨','💫','🌟'];for(let k=0;k<26;k++){const s=document.createElement('span');s.className='conf';s.textContent=em[k%em.length];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.5+'s';s.style.fontSize=(20+Math.random()*20)+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),2600)}}
+function award(sec,msg){App.done.add(sec);const c=$(`.mcard[data-go="s-${sec}"]`);if(c)c.classList.add('done');confetti();toast(msg||'Amazing work! ⭐')}
+function quiz(el,qs,onDone){
+  let score=0,ans=0;
+  el.innerHTML=qs.map((q,i)=>`<div class="qcard"><span class="qn">Question ${i+1}</span><p class="qq">${q.q}</p><div class="opts">${q.o.map((o,j)=>`<button class="opt" data-i="${i}" data-j="${j}">${o}</button>`).join('')}</div><p class="why"></p></div>`).join('')+`<div class="score-box" hidden></div>`;
+  el.addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const c=b.closest('.qcard');if(c.dataset.done)return;c.dataset.done=1;
+    const q=qs[b.dataset.i],ok=+b.dataset.j===q.a;b.classList.add(ok?'right':'wrong');if(!ok)$$('.opt',c)[q.a].classList.add('right');
+    $('.why',c).innerHTML=(ok?'✅ Correct! ':'💡 ')+q.why;if(ok)score++;ans++;
+    if(ans===qs.length){const sb=$('.score-box',el);sb.hidden=false;const st=Math.round(score/qs.length*5);sb.innerHTML=`You got ${score} out of ${qs.length}! <br>${'⭐'.repeat(st)}${'☆'.repeat(5-st)}<br><span style="font-size:18px;font-weight:400">${score===qs.length?'Perfect! You are a true AI Explorer!':'Great try! Scroll up to read the explanations.'}</span>`;onDone&&onDone(score)}});
+}
+function sorter(el,items,cats,onWin){
+  const build=()=>{
+    el.innerHTML=`<p class="muted">👆 Tap a picture, then tap the box where it belongs.</p><div class="tray">${shuffle(items.map((it,i)=>({...it,i}))).map(it=>`<button class="chip" data-i="${it.i}"><span class="big">${it.e}</span><small>${it.n}</small></button>`).join('')}</div><div class="buckets">${cats.map(c=>`<div class="bucket" data-c="${c.id}"><div class="bh">${c.icon} ${c.name}</div><div class="bin"></div></div>`).join('')}</div><div class="row"><button class="btn teal chk">Check my sorting ✔</button><button class="btn ghost rst">Start again ↺</button></div><p class="fb"></p>`;
+    let sel=null;
+    el.onclick=e=>{
+      const ch=e.target.closest('.chip');
+      if(ch){$$('.chip',el).forEach(c=>c.classList.remove('sel'));if(sel===ch){sel=null;return}sel=ch;ch.classList.add('sel');ch.classList.remove('ok','bad');return}
+      const bk=e.target.closest('.bucket');
+      if(bk&&sel){$('.bin',bk).appendChild(sel);sel.classList.remove('sel');sel=null;return}
+      if(e.target.closest('.rst')){build();return}
+      if(e.target.closest('.chk')){
+        const fb=$('.fb',el);
+        if($$('.tray .chip',el).length){fb.className='fb oops';fb.textContent='Sort every picture first! 🙂';return}
+        let right=0;$$('.bucket',el).forEach(b=>$$('.chip',b).forEach(c=>{const ok=items[c.dataset.i].cat===b.dataset.c;c.classList.add(ok?'ok':'bad');if(ok)right++}));
+        if(right===items.length){fb.className='fb good';fb.textContent=`All ${right} correct! You made perfect training data! 🎉`;onWin&&onWin()}
+        else{fb.className='fb oops';fb.textContent=`${right} of ${items.length} correct. Move the red ones to the right box and check again!`}
+      }
+    };
+  };build();
+}
+window.addEventListener('DOMContentLoaded',setup);
+</script><script>App.onShow.demo=()=>{
+  const COL={blue:['🔵 Blue','#3a8ee0'],red:['🔴 Red','#e9604f'],green:['🟢 Green','#2fb35a'],yellow:['🟡 Yellow','#f3c44f'],purple:['🟣 Purple','#8a68dc']};
+  const SH=[c=>`<polygon points="35,5 43,26 66,26 47,40 54,63 35,49 16,63 23,40 4,26 27,26" fill="${c}"/>`,
+    c=>`<path d="M35 60 C5 40 5 12 22 12 C30 12 35 20 35 20 C35 20 40 12 48 12 C65 12 65 40 35 60Z" fill="${c}"/>`,
+    c=>`<circle cx="35" cy="35" r="20" fill="${c}"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="35" y1="35" x2="${35+31*Math.cos(a*Math.PI/180)}" y2="${35+31*Math.sin(a*Math.PI/180)}" stroke="${c}" stroke-width="4" stroke-linecap="round"/>`).join('')}`,
+    c=>`<polygon points="10,35 35,10 60,35 60,62 10,62" fill="${c}"/><rect x="29" y="44" width="12" height="18" fill="#fff"/>`,
+    c=>[0,72,144,216,288].map(a=>`<circle cx="${35+15*Math.cos(a*Math.PI/180)}" cy="${33+15*Math.sin(a*Math.PI/180)}" r="11" fill="${c}"/>`).join('')+`<circle cx="35" cy="33" r="8" fill="#fff4c9"/>`];
+  const EN=['blue','red','green','yellow','purple','red','blue','green','yellow','purple'];
+  const known=new Set(['blue']);
+  $('#trainCols').innerHTML=Object.entries(COL).map(([k,[n]])=>`<label class="pill" style="font-size:18px;padding:8px 14px"><input type="checkbox" data-c="${k}" ${k==='blue'?'checked disabled':''} style="transform:scale(1.3);margin-right:6px">${n} drawings</label>`).join('');
+  const draw=()=>{let ok=0;$('#entries').innerHTML=EN.map((c,i)=>{const a=known.has(c);if(a)ok++;return `<div class="chip" style="cursor:default;border-color:${a?'#1fa79c':'#e9604f'};background:${a?'#e6f7f5':'#fdecea'}"><svg viewBox="0 0 70 70" width="62" height="62">${SH[i%5](COL[c][1])}</svg><small><b>${a?'✅ Art!':'❌ Not art?'}</b></small></div>`}).join('');
+    $('#fairTxt').textContent=`${ok} of ${EN.length}`;$('#fairBar').style.width=ok/EN.length*100+'%';
+    if(ok===EN.length)toast('Now the robot judge is fair to every colour! ⚖️')};
+  $('#trainCols').onchange=e=>{const c=e.target.dataset.c;if(!c)return;e.target.checked?known.add(c):known.delete(c);draw()};draw();
+  $('#fakeSay').onclick=()=>say($('#fakeTxt').value+($('#lbl').checked?'. Remember: this voice is AI made.':''));
+  $('#lbl').onchange=()=>$('#lblBox').hidden=!$('#lbl').checked;
+};
+
+App.onShow.activity=()=>{
+  const P=[{e:'🐘🪂',t:'"ELEPHANT goes skydiving!!! Share before it gets deleted!!!"',f:1,c:'Too shocking + "share fast" = big warning signs. Elephants can\'t skydive!'},
+    {e:'🏫📰',t:'"Sports Day moves to Friday." — message on the official school website',f:0,c:'It comes from a trusted source: the school website.'},
+    {e:'🧑‍🎤🖐️',t:'A photo of a pop star waving — with SIX fingers on one hand',f:1,c:'Weird hands are a common clue of AI-made pictures.'},
+    {e:'🎙️🔑',t:'A voice message that sounds like Mum: "Quick, tell me your password!"',f:1,c:'Voices can be faked. Never share passwords — check with Mum in person.'},
+    {e:'🌧️📱',t:'Your weather app: "Light rain tomorrow afternoon."',f:0,c:'Normal, not shocking, from an app you trust.'},
+    {e:'🦈🏙️',t:'"A shark swimming down the main street after the rain!" (no news site shares it)',f:1,c:'Shocking and no trusted source. Many of these photos are fake.'}];
+  let done=0,right=0;
+  $('#posts').innerHTML=P.map((p,i)=>`<div class="card" style="margin:0" data-i="${i}"><div style="font-size:52px">${p.e}</div><p style="font-size:20px">${p.t}</p><div class="row"><button class="btn sm teal" data-f="0">✅ Probably real</button><button class="btn sm coral" data-f="1">⚠️ Could be fake</button></div><p class="clue" style="font-weight:700"></p></div>`).join('');
+  $('#posts').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;const card=b.closest('[data-i]');if(card.dataset.done)return;card.dataset.done=1;const p=P[card.dataset.i],ok=+b.dataset.f===p.f;
+    if(ok)right++;done++;card.style.borderColor=ok?'#1fa79c':'#e9604f';$('.clue',card).innerHTML=(ok?'✅ Good detective work! ':'💡 Look again: ')+`<span style="font-weight:400">${p.c}</span>`;
+    if(done===P.length){const fb=$('#postFb');fb.className='fb '+(right>=5?'good':'oops');fb.textContent=`You solved ${right} of ${P.length} cases! ${right>=5?'Super Fake Detective! 🕵️':'Read the clues — you will be an expert soon!'}`;if(right>=5)award('activity','Fake Detective! 🕵️')}};
+};
+
+App.onShow.build=()=>{
+  const SCHOOL=[['👩🏿','D','adult'],['👴🏽','M','elder'],['👧🏻','L','kid'],['🧑🏾‍🦽','D','adult'],['👨🏻','L','adult'],['🧕🏽','M','adult'],['👦🏿','D','kid'],['👩🏼‍🦰','L','adult']];
+  const POOL=[['👩🏾','D','adult'],['👵🏽','M','elder'],['👦🏼','L','kid'],['👳🏽‍♂️','M','adult'],['👧🏿','D','kid'],['👨🏻','L','adult'],['👩🏻','L','adult'],['🧓🏿','D','elder'],['🧒🏽','M','kid'],['🐶','dog','dog']];
+  let train,pool;
+  const draw=()=>{$('#tN').textContent=train.length;
+    $('#train').innerHTML=train.map((p,i)=>`<button class="chip" data-t="${i}"><span class="big">${p[0]}</span></button>`).join('')||'<span class="muted">Empty — the robot knows nobody!</span>';
+    $('#pool').innerHTML=pool.map((p,i)=>`<button class="chip" data-p="${i}"><span class="big">${p[0]}</span></button>`).join('');
+    $('#gCode').innerHTML=`training_data = [${train.map(p=>p[0]).join(', ')}]\n\n<span class="k">for</span> person <span class="k">in</span> school:\n    <span class="k">if</span> robot.knows(person):\n        say(<span class="s">"Hello! 👋"</span>)\n    <span class="k">else</span>:\n        say(<span class="s">"I don't know you…"</span>)`};
+  const reset=()=>{train=[POOL[5],POOL[5],POOL[5]];pool=POOL.slice();$('#door').innerHTML='Press ▶ Run to open the door.';$('#gBar').style.width='0';$('#gFb').textContent='';draw()};reset();
+  $('#pool').onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;if(train.length>=8){toast('Only 8 spots! Remove a photo first.');return}const p=pool[b.dataset.p];
+    if(p[1]==='dog')toast('A dog is not a person — this photo will not help the greeter! 🐶');train.push(p);draw()};
+  $('#train').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;train.splice(+b.dataset.t,1);draw()};
+  $('#gRst').onclick=reset;
+  $('#gRun').onclick=()=>{let g=0;$('#door').innerHTML='';
+    SCHOOL.forEach((s,i)=>setTimeout(()=>{const k=train.some(t=>t[1]===s[1]&&t[2]===s[2]);if(k)g++;
+      $('#door').insertAdjacentHTML('beforeend',`<div class="rule" style="margin:4px 0;border-color:${k?'#1fa79c':'#e9604f'}"><span style="font-size:34px">${s[0]}</span><b>${k?'👋 Hello!':'❓ I don\'t know you…'}</b></div>`);
+      $('#gBar').style.width=g/SCHOOL.length*100+'%';
+      if(i===SCHOOL.length-1){const fb=$('#gFb');if(g===8){fb.className='fb good';fb.textContent='8 / 8! Your robot greets EVERYONE. That is a fair AI! ⚖️🎉';award('build','Fairness engineer! 🧱')}
+        else{fb.className='fb oops';fb.textContent=`${g} / 8 greeted. ${8-g} people were left out. Who is missing from your training data?`}}},i*350))};
+};
+
+App.onShow.challenge=()=>{
+  quiz($('#dilemmas'),[
+    {q:'😂 A friend sends a funny AI video that makes your teacher say silly things. What do you do?',o:['Share it with the whole class','Don\'t share it — it could hurt the teacher. Tell your friend kindly.','Post it online','Make an even sillier one'],a:1,why:'Fake videos of real people can hurt them, even if they seem funny.'},
+    {q:'📝 You have an AI helper for homework. What is the smart way to use it?',o:['Copy everything it writes','Ask it to explain, then write in your own words','Let it do all your homework forever','Never ask anyone for help'],a:1,why:'AI can help you learn — but the learning should be yours!'},
+    {q:'🤳 An app asks for a photo of your face to "turn you into a cartoon".',o:['Upload it quickly','Ask a parent first','Upload your friend\'s photo instead','Upload 10 photos'],a:1,why:'Your face is personal data. Always ask a grown-up before sharing it.'},
+    {q:'⚽ A robot game always picks boys as team captains, never girls.',o:['That\'s fine, robots are always right','Tell an adult — the AI might be unfair','Stop playing forever','Only play as a boy'],a:1,why:'That is bias! People should check the AI and fix it (human oversight).'},
+    {q:'📢 You see a post: "School is closed FOREVER!"',o:['Share it fast with everyone','Believe it and stay home','Check the school website or ask an adult','Add more scary words and share'],a:2,why:'STOP · THINK · CHECK · ASK. Look for a trusted source first.'}
+  ],s=>{if(s>=4)award('challenge','Responsible Explorer! 🧭')});
+  $('#pMake').onclick=()=>{const n=$('#pName').value.trim()||'AI Explorer';const pr=$$('.pr:checked').map(c=>c.value);const own=$('#pOwn').value.trim();if(own)pr.push(own);
+    if(!pr.length){toast('Choose or write at least one promise!');return}
+    $('#pCard').innerHTML=`<div class="card center" style="margin-top:16px;border:4px solid #f3c44f;background:linear-gradient(160deg,#fffdf3,#efeaff)"><div class="luna" style="width:90px"></div><h3 style="font-size:28px">🌙 My AI Promise</h3><p style="font-size:22px"><b>${n.replace(/</g,'&lt;')}</b> promises:</p>${pr.map(p=>`<p style="font-size:19px">⭐ ${p.replace(/</g,'&lt;')}</p>`).join('')}<p class="muted" style="font-size:15px">Responsible AI Explorer · Young IT Germany</p></div>`;
+    $('#pCard .luna').innerHTML=LUNA;award('challenge','Promise made! 🌟')};
+};
+
+App.onShow.quiz=()=>quiz($('#quiz'),[
+  {q:'Why was the Robot Judge unfair?',o:['It was a mean robot','It learned only from blue drawings','It was broken','It needed batteries'],a:1,why:'It learned from data that left out other colours — that is bias.'},
+  {q:'What is a deepfake?',o:['A very deep swimming pool','A fake picture, video or voice made by AI','A real news video','A type of robot'],a:1,why:'Deepfakes look real, but they are made by AI.'},
+  {q:'Which is a clue that a picture may be fake?',o:['It comes from your school website','A person has six fingers','It is a drawing you made','It is your family photo'],a:1,why:'Weird hands are a common clue in AI-made pictures.'},
+  {q:'What should you do FIRST when you see a shocking video?',o:['Share it','STOP — don\'t share right away','Laugh and forward it','Delete your account'],a:1,why:'STOP · THINK · CHECK · ASK!'},
+  {q:'How can we make an AI fairer?',o:['Train it with examples of all kinds of people','Use only one kind of photo','Turn off the lights','Make it faster'],a:0,why:'Diverse data helps AI work for everyone.'},
+  {q:'"Human oversight" means…',o:['Robots watch humans','A real person checks what the AI decides','Nobody checks','Looking over a wall'],a:1,why:'People must stay in charge and check AI decisions.'}
+],s=>{if(s>=4)award('quiz','Quiz star! 🎯')});
+</script><script>App.onShow.activity=()=>{
+  const P=[{e:'🐘🪂',t:'"An ELEPHANT goes skydiving!!! Share now!!!"',f:1,c:'Too shocking and "share now" — a warning sign!'},
+    {e:'🏫📰',t:'"Sports Day is on Friday." — from your school website',f:0,c:'It comes from your school — a trusted place.'},
+    {e:'🧑‍🎤🖐️',t:'A photo of a singer with SIX fingers',f:1,c:'Strange hands are a clue the picture may be made by AI.'},
+    {e:'🌧️📱',t:'Your weather app: "Rain tomorrow."',f:0,c:'Normal news from an app you know.'}];
+  let done=0,right=0;
+  $('#posts').innerHTML=P.map((p,i)=>`<div class="card" style="margin:0" data-i="${i}"><div style="font-size:52px">${p.e}</div><p style="font-size:21px">${p.t}</p><div class="row"><button class="btn sm teal" data-f="0">✅ Real</button><button class="btn sm coral" data-f="1">⚠️ Maybe fake</button></div><p class="clue" style="font-weight:700"></p></div>`).join('');
+  $('#posts').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;const card=b.closest('[data-i]');if(card.dataset.done)return;card.dataset.done=1;const p=P[card.dataset.i],ok=+b.dataset.f===p.f;
+    if(ok)right++;done++;card.style.borderColor=ok?'#1fa79c':'#e9604f';$('.clue',card).innerHTML=(ok?'✅ Well done! ':'💡 ')+`<span style="font-weight:400">${p.c}</span>`;
+    if(done===P.length){const fb=$('#postFb');fb.className='fb '+(right>=3?'good':'oops');fb.textContent=`You solved ${right} of 4! ${right>=3?'Super Fake Detective! 🕵️':'Read the clues — you are learning!'}`;if(right>=3)award('activity','Fake Detective! 🕵️')}};
+};
+
+App.onShow.build=()=>{
+  const SCHOOL=[['👩🏿','D'],['👴🏽','M'],['👧🏻','L'],['👦🏿','D']];
+  const POOL=[['👩🏾','D'],['👨🏻','L'],['🧒🏽','M'],['👩🏻','L'],['🐶','dog']];
+  let train;
+  const draw=()=>{$('#tN').textContent=train.length;
+    $('#train').innerHTML=train.map((p,i)=>`<button class="chip" data-t="${i}"><span class="big">${p[0]}</span></button>`).join('')||'<span class="muted">Empty!</span>';
+    $('#pool').innerHTML=POOL.map((p,i)=>`<button class="chip" data-p="${i}"><span class="big">${p[0]}</span></button>`).join('');
+    $('#gCode').innerHTML=`robot_photos = [${train.map(p=>p[0]).join(', ')}]\n\n<span class="k">if</span> robot.knows(friend):\n    say(<span class="s">"Hello! 👋"</span>)`};
+  const reset=()=>{train=[POOL[1],POOL[1],POOL[3]];$('#door').innerHTML='Press ▶ to open the door.';$('#gFb').textContent='';draw()};reset();
+  $('#pool').onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;if(train.length>=5){toast('Only 5 spots! Tap a photo above to remove it.');return}
+    const p=POOL[b.dataset.p];if(p[1]==='dog')toast('A dog is not a person! 🐶');train.push(p);draw()};
+  $('#train').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;train.splice(+b.dataset.t,1);draw()};
+  $('#gRst').onclick=reset;
+  $('#gRun').onclick=()=>{let g=0;$('#door').innerHTML='';
+    SCHOOL.forEach((s,i)=>setTimeout(()=>{const k=train.some(t=>t[1]===s[1]);if(k)g++;
+      $('#door').insertAdjacentHTML('beforeend',`<div class="rule" style="margin:4px 0;border-color:${k?'#1fa79c':'#e9604f'}"><span style="font-size:34px">${s[0]}</span><b>${k?'👋 Hello!':'❓ I don\'t know you…'}</b></div>`);
+      if(i===SCHOOL.length-1){const fb=$('#gFb');if(g===4){fb.className='fb good';fb.textContent='4 / 4! The robot greets EVERYONE now. That is fair! ⚖️🎉';award('build','Fairness helper! 🧱')}
+        else{fb.className='fb oops';fb.textContent=`${g} / 4 greeted. Someone was left out — that's not fair! Add a photo that looks like them.`}}},i*450))};
+};
+
+App.onShow.challenge=()=>{
+  quiz($('#dilemmas'),[
+    {q:'😂 A friend shows a funny FAKE video of your teacher. What do you do?',o:['📤 Send it to everyone','🙅 Don\'t share it — it could hurt your teacher'],a:1,why:'Fake videos of real people can hurt their feelings.'},
+    {q:'🤳 An app asks for a photo of your face.',o:['📸 Send it quickly','🙋 Ask a grown-up first'],a:1,why:'Your face is special — ask a grown-up first.'},
+    {q:'⚽ A robot game always picks only boys as captains.',o:['👍 That\'s fine','🗣️ Tell a grown-up — it\'s not fair'],a:1,why:'That is unfair! People must check and fix the robot.'}
+  ],s=>{if(s>=2)award('challenge','Kind Explorer! 🧭')});
+  $('#pMake').onclick=()=>{const n=$('#pName').value.trim()||'AI Explorer';const pr=$$('.pr:checked').map(c=>c.value);
+    if(!pr.length){toast('Choose at least one promise!');return}
+    $('#pCard').innerHTML=`<div class="card center" style="margin-top:16px;border:4px solid #f3c44f;background:linear-gradient(160deg,#fffdf3,#efeaff)"><div class="luna" style="width:90px"></div><h3 style="font-size:28px">🌙 My AI Promise</h3><p style="font-size:22px"><b>${n.replace(/</g,'&lt;')}</b> promises:</p>${pr.map(p=>`<p style="font-size:20px">⭐ ${p}</p>`).join('')}<p class="muted" style="font-size:15px">AI Explorer · Young IT Germany</p></div>`;
+    $('#pCard .luna').innerHTML=LUNA;award('challenge','Promise made! 🌟')};
+};
+
+App.onShow.quiz=()=>quiz($('#quiz'),[
+  {q:'The Robot Judge learned only blue drawings. Was it fair to Zoe\'s red rocket?',o:['✅ Yes','❌ No, it was unfair'],a:1,why:'It only learned blue, so it was unfair to other colours.'},
+  {q:'A deepfake is…',o:['🎭 A fake picture or video made by AI','🏊 A deep pool'],a:0,why:'Deepfakes look real but are made by AI.'},
+  {q:'A photo shows a person with 6 fingers 🖐️. It might be…',o:['🤖 Made by AI','✅ Always real'],a:0,why:'Strange hands are a clue!'},
+  {q:'You see a shocking video. First you…',o:['🛑 STOP and ask a grown-up','📤 Share it fast'],a:0,why:'STOP · THINK · CHECK · ASK!'},
+  {q:'To make AI fair, it should learn from…',o:['🌍 All kinds of people','👤 Only one kind of person'],a:0,why:'Many different examples make AI fair for everyone.'}
+],s=>{if(s>=4)award('quiz','Quiz star! 🎯')});
+</script></body></html>
